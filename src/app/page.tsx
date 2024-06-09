@@ -1,24 +1,21 @@
 'use client'
-import React, { use, useEffect } from "react"
+import React, { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/contexts/AuthContext";
 import { ProgressSpinner } from "primereact/progressspinner";
+import TopBar from "@/components/topBar";
+import AdditionForm from "@/components/additionForm";
+import ShowMessages from "@/components/showMessages";
 
 export default function Home() {
   const router = useRouter();
-  const { isLoading, user, signOut } = useAuth();
+  const { isLoading, user } = useAuth();
 
   useEffect(() => {
     if (!isLoading && !user) {
       router.replace("/login");
     }
   }, [isLoading, user]);
-
-
-  const handleSignOut = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    signOut();
-  };
 
   if (isLoading || !user) {
     return (
@@ -29,11 +26,10 @@ export default function Home() {
   }
 
   return (
-    <div>
-      {user && <a href="#" onClick={handleSignOut}>
-        Log Out
-      </a>}
-      <h1>Email: {user?.email}</h1>
-    </div>
+    <>
+      <TopBar />
+      {user?.email?.startsWith("admin") ?
+        <AdditionForm /> : <ShowMessages />}
+    </>
   )
 }

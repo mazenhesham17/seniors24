@@ -1,8 +1,9 @@
 'use client'
 import React, { createContext, useContext, useState, useEffect, use } from 'react';
-import { auth } from '../firebase/clientApp';
+import { auth, db } from '../firebase/clientApp';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
-import { useError } from './ErrorContext';
+import { ref, set } from 'firebase/database';
+import { useMessage } from './MessageContext';
 
 interface AuthContextType {
   isLoading: boolean;
@@ -21,7 +22,7 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setLoading] = useState<boolean>(true); // [1
   const [user, setUser] = useState<User | null>(null);
-  const showErrorMessage = useError();
+  const { showErrorMessage } = useMessage();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (loggedInUser) => {
@@ -37,6 +38,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
+      setLoading(false);
       showErrorMessage(`Failed to sign in: ${error.message}`);
     }
   };
@@ -44,8 +46,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const signUp = async (email: string, password: string) => {
     try {
       setLoading(true);
-      await createUserWithEmailAndPassword(auth, email, password);
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const userRef = ref(db, `users/${user.uid}`);
+      set(userRef, {
+        name: user.email?.split('@')[0],
+      });
+
     } catch (error: any) {
+      setLoading(false);
       showErrorMessage(`Failed to sign up: ${error.message}`);
     }
   };
@@ -55,6 +63,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(true);
       await auth.signOut();
     } catch (error: any) {
+      setLoading(false);
       showErrorMessage(`Failed to sign out: ${error.message}`);
     }
   };

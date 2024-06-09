@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import './globals.css';
 import { AuthProvider } from "@/lib/contexts/AuthContext";
-import { ErrorProvider } from "@/lib/contexts/ErrorContext";
-
-const inter = Inter({ subsets: ["latin"] });
+import { MessageProvider } from "@/lib/contexts/MessageContext";
 
 export const metadata: Metadata = {
   title: "Seniors 24",
@@ -19,13 +16,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ErrorProvider>
+        <MessageProvider>
           <AuthProvider>
-            <main>
+            <main className="h-screen flex flex-col" >
               {children}
             </main>
           </AuthProvider>
-        </ErrorProvider>
+        </MessageProvider>
       </body>
     </html>
   );

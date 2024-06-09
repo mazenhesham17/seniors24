@@ -17,7 +17,8 @@ export const InputField = (props: InputFieldProps) => {
             <input
                 {...field}
                 {...props}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:py-3 md:px-4"
+                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:py-3 md:px-4 ${meta.touched && meta.error ? 'border-red-500' : ''
+                    }`}
             />
             {meta.touched && meta.error ? (
                 <div className="text-red-500 text-xs mt-1 md:text-sm">{meta.error}</div>

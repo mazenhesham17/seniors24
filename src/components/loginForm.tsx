@@ -1,8 +1,7 @@
-'use client'
 import React from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import InputField from './inputField';
+import InputField from './form/inputField';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 
@@ -11,7 +10,7 @@ interface User {
   password: string;
 }
 
-const LoginForm = () => {
+export const LoginForm = () => {
   const { signIn } = useAuth();
   const router = useRouter();
   const validationSchema = Yup.object({
@@ -23,16 +22,14 @@ const LoginForm = () => {
       .min(6, 'Password must be at least 6 characters long'),
   });
 
-
-
   const submit = async (user: User) => {
     await signIn(user.email, user.password);
     router.replace('/');
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+    <div className="h-full flex items-center justify-center">
+      <div className="bg-white p-8 m-4 rounded-lg shadow-lg max-w-md w-full">
         <Formik
           initialValues={{
             email: '',
