@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       height:{
+        "screen": "100svh",
         "list": "calc(100% - 80px)",
       },
       screens: {
