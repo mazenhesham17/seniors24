@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      height:{
+        "list": "calc(100% - 80px)",
+      },
       screens: {
         "sm": "320px",
         "md": "481px",

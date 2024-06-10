@@ -43,7 +43,7 @@ export const ShowMessages = () => {
 
 
   return (
-    <div className="h-full flex flex-col items-center justify-center">
+    <div className="h-list flex flex-col items-center ">
       <h2 className="text-2xl text-white font-bold m-4">Messages</h2>
       <div className="overflow-y-auto">
         <ul className="space-y-4 mx-4">
