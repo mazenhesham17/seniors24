@@ -21,14 +21,7 @@ export const Card = (props: CardProps) => {
       {props.imageUrl && (
         <>
           <div className="absolute top-2 left-2 w-12 h-12">
-            <Image
-              src='/gown.png'
-              alt="gown"
-              width='400'
-              height='400'
-              className="w-full h-full object-cover rounded"
-              priority 
-            />
+          <img src='https://firebasestorage.googleapis.com/v0/b/seniors-24.appspot.com/o/assets%2Fgown.png?alt=media&token=8ecce6e6-aa5e-4f09-8b71-cd1d3132702a' alt="gown" className="w-full h-full object-cover rounded" />
           </div>
           <div className="mt-2">
             <img src={props.imageUrl} alt="Message" className="w-full h-full object-cover rounded" />
@@ -48,7 +41,7 @@ export const Card = (props: CardProps) => {
             console.log('Downloaded')
           }} />
         <p className="text-sm text-right text-gray-500">{props.date}</p>
-        <Image src='/signature.png' alt="gown" width='383' height='322' className="w-10 object-cover rounded" priority />
+        <img src='https://firebasestorage.googleapis.com/v0/b/seniors-24.appspot.com/o/assets%2Fsignature.png?alt=media&token=a98222d8-7170-4ada-9e12-9839b14256e5' alt="signature" className="w-10 object-cover rounded" />
       </div>
     </li>
   );
