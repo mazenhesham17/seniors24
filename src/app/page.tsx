@@ -30,7 +30,7 @@ export default function Home() {
       <div className="h-full flex items-center justify-center">
         <div className="bg-white p-8 m-4 rounded-lg shadow-lg max-w-md w-full">
           <p className="tangerine-regular text-gray-500">
-            "If you are here, you must be important to me. We made fantastic memories together. I really appreciate your presence in my life."
+            If you are here, you must be important to me. We made fantastic memories together. I really appreciate your presence in my life.
           </p>
           <Link href="/addition" className="w-full inline-flex justify-center my-4 py-2 px-4 border border-transparent shadow-sm text-base font-bold rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >
             <button >
