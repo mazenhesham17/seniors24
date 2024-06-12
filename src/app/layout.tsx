@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import './globals.css';
 import { AuthProvider } from "@/lib/contexts/AuthContext";
 import { MessageProvider } from "@/lib/contexts/MessageContext";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Seniors 24",
@@ -15,6 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet" />
+
+      </Head>
       <body>
         <MessageProvider>
           <AuthProvider>

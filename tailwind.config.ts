@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'brush': ['Brush Script', 'cursive'],
+        'tangerine': ['Tangerine', 'cursive'],
+      },
       height:{
         "screen": "100svh",
         "list": "calc(100% - 80px)",
@@ -29,6 +33,8 @@ const config: Config = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };
 export default config;

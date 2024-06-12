@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
+import imageCompression from 'browser-image-compression';
 import { db, storage } from '@/lib/firebase/clientApp';
 import { ref as storageRef, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import { ref as databaseRef, onValue, push, off } from 'firebase/database';
+import { ref as databaseRef, get, push, off } from 'firebase/database';
 import { ProgressBar } from 'primereact/progressbar';
+import { useAuth } from '@/lib/contexts/AuthContext';
 import { useMessage } from '@/lib/contexts/MessageContext';
 import SelectField from './form/selectField';
 import ImageField from './form/imageField';
@@ -28,6 +30,7 @@ const validationSchema = Yup.object({
 });
 
 const AdditionForm = () => {
+  const { user } = useAuth();
   const [image, setImage] = useState<File | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [progress, setProgress] = useState(0);
@@ -35,25 +38,45 @@ const AdditionForm = () => {
   const { showSuccessMessage } = useMessage();
 
   useEffect(() => {
+    if (!user) return;
     const usersRef = databaseRef(db, 'users');
-    onValue(usersRef, (snapshot) => {
+
+    get(usersRef).then((snapshot) => {
       const data = snapshot.val();
-      const users = Object.keys(data).map((key) => {
-        return {
-          name: data[key].name,
-          uid: key,
-        };
-      });
+      const users = Object.keys(data)
+        .filter((key) => key !== user.uid)
+        .map((key) => {
+          return {
+            name: data[key].name,
+            uid: key,
+          };
+        }).sort((a, b) => a.name.localeCompare(b.name));
       setUsers(users);
     });
     return () => {
       off(usersRef);
     };
-  }, []);
+  }, [user]);
+
+  const compressImage = async (file: File) => {
+    const options = {
+      maxSizeMB: 2,
+      maxWidthOrHeight: 1600,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(file, options);
+      return compressedFile;
+    } catch (error) {
+      console.error('Error compressing image:', error);
+      return file;
+    }
+  };
 
   const uploadImage = async (image: File, uid: string) => {
     const imageRef = storageRef(storage, `images/${uid}/${uuidv4()}`);
-    const uploadTask = uploadBytesResumable(imageRef, image);
+    const compressedImage = await compressImage(image);
+    const uploadTask = uploadBytesResumable(imageRef, compressedImage);
     setUploading(true);
     uploadTask.on('state_changed', (snapshot) => {
       const progress = Math.ceil((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
@@ -67,6 +90,7 @@ const AdditionForm = () => {
   const submit = async (values: FormValues) => {
     const imageUrl = image ? await uploadImage(image, values.selectedUser) : null;
     const message = {
+      sender: user?.displayName,
       imageUrl: imageUrl,
       message: values.message,
       timestamp: new Date().toUTCString(),
