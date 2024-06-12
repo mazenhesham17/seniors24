@@ -27,6 +27,7 @@ export const Card = (props: CardProps) => {
               width='400'
               height='400'
               className="w-full h-full object-cover rounded"
+              priority 
             />
           </div>
           <div className="mt-2">
@@ -47,7 +48,7 @@ export const Card = (props: CardProps) => {
             console.log('Downloaded')
           }} />
         <p className="text-sm text-right text-gray-500">{props.date}</p>
-        <Image src='/signature.png' alt="gown" width='383' height='322' className="w-10 object-cover rounded" />
+        <Image src='/signature.png' alt="gown" width='383' height='322' className="w-10 object-cover rounded" priority />
       </div>
     </li>
   );
